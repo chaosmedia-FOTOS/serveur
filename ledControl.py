@@ -64,28 +64,3 @@ def fadeTo(unePin, value, temps):
 	if(tabPin[unePin][3] == False):
 		tabPin[unePin][3] = True
 		thread.start_new_thread( print_time, (unePin, ))
-
-"""
-	Main
-"""
-try:
-	GPIO.setmode(GPIO.BCM)
-
-	#test
-	while True:
-		fadeTo(23,255,2000)	
-		time.sleep(1)
-		fadeTo(18,125,1000)
-		time.sleep(1)
-		fadeTo(22,200,3000)
-		time.sleep(1)
-		fadeTo(23,0,2000)
-		time.sleep(1)
-		fadeTo(18,0,2000)
-		time.sleep(1)
-		fadeTo(22,0,2000)
-		time.sleep(1.5)
-
-finally:
-	GPIO.cleanup()
-	pass

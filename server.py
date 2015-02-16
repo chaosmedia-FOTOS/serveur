@@ -2,6 +2,8 @@
 import SocketServer
 import logging
 
+import ledControl
+
 #Log setting
 logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', level=logging.INFO)
 
@@ -57,6 +59,7 @@ class FlashServer(SocketServer.BaseRequestHandler):
 
 					else :
 						logging.info('Fading pin %s to value %s in %sms', pin, value, ms)
+						ledControl.fadeTo(pin, value, ms)
 				
 				elif dataLst[0] == "info" :
 					if dataLst[1] == "begin" :
@@ -83,6 +86,8 @@ class FlashServer(SocketServer.BaseRequestHandler):
 		logging.info("%s disconnected", format(self.client_address[0]))
 
 try:
+	GPIO.setmode(GPIO.BCM)
+	
 	server = SocketServer.TCPServer((HOST, PORT), FlashServer)
 	logging.info('Server starting')
 	server.serve_forever()
@@ -94,3 +99,4 @@ finally:
 	logging.info('Server stopping')
 	server.shutdown()
 	logging.info('Server stopped')
+	GPIO.cleanup()
