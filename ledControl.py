@@ -1,11 +1,11 @@
 #!/usr/bin/python
 
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import time
 import thread
 
 sleepingTime = 0.05
-tabPin = []
+tabPin = {}
 
 """
 	Functions
@@ -27,29 +27,24 @@ def print_time(pin):
 		elif tabPin[pin][4] < 0 :
 			tabPin[pin][4] = 0
 
-		tabPin[pin][0].ChangeDutyCycle(tabPin[pin][4])
+#		tabPin[pin][0].ChangeDutyCycle(tabPin[pin][4])
 			
 	tabPin[pin][3] = False
 
 def fadeTo(unePin, value, temps):
 	
 	value = round(value / 2.55, 0)
+	if not unePin in tabPin:
+		tabPin[unePin]    = [0 for i in range(6)]
 
-	for pin in range(len(tabPin), unePin+1):
-		tabPin.append([0 for i in range(6)])
-		tabPin[pin][1] = 0					#Valeur (Goal)
-		tabPin[pin][2] = 0					#Step
-		tabPin[pin][3] = False				#On/Off
-		tabPin[pin][4] = 0					#Valeur actuel
-		tabPin[pin][5] = False				#Setuped
+		tabPin[unePin][1] = 0					#Valeur (Goal)
+		tabPin[unePin][2] = 0					#Step
+		tabPin[unePin][3] = False				#On/Off
+		tabPin[unePin][4] = 0					#Valeur actuel
 
-	#Setup la pin si elle n'est pas encore cree
-	if not tabPin[unePin][5]:
-		GPIO.setup(unePin, GPIO.OUT)
-		tabPin[unePin][0] = GPIO.PWM(unePin, 150)	#Porte/Frequence
-		tabPin[unePin][0].start(0)
-		tabPin[unePin][5] = True
-
+#		GPIO.setup(unePin, GPIO.OUT)
+#		tabPin[unePin][0] = GPIO.PWM(unePin, 150)	#Porte/Frequence
+#		tabPin[unePin][0].start(0)
 
 	tabPin[unePin][1] = value
 

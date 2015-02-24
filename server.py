@@ -45,7 +45,7 @@ class FlashServer(SocketServer.BaseRequestHandler):
 					try:
 						#Convert string to int
 						ms = abs(int(dataLst[1]))
-						pin = abs(int(dataLst[2]))
+						pin = dataLst[2]
 						value = abs(int(dataLst[3]))
 
 						if(value > 255) :
@@ -86,7 +86,7 @@ class FlashServer(SocketServer.BaseRequestHandler):
 		logging.info("%s disconnected", format(self.client_address[0]))
 
 try:
-	GPIO.setmode(GPIO.BCM)
+#	GPIO.setmode(GPIO.BCM)
 	
 	server = SocketServer.TCPServer((HOST, PORT), FlashServer)
 	logging.info('Server starting')
