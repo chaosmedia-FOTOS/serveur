@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import Adafruit_BBIO.PWM as PWM
+
 import SocketServer
 import logging
 
@@ -45,7 +47,7 @@ class FlashServer(SocketServer.BaseRequestHandler):
 					try:
 						#Convert string to int
 						ms = abs(int(dataLst[1]))
-						pin = dataLst[2]
+						pin = str(dataLst[2])
 						value = abs(int(dataLst[3]))
 
 						if(value > 255) :
@@ -86,8 +88,6 @@ class FlashServer(SocketServer.BaseRequestHandler):
 		logging.info("%s disconnected", format(self.client_address[0]))
 
 try:
-#	GPIO.setmode(GPIO.BCM)
-	
 	server = SocketServer.TCPServer((HOST, PORT), FlashServer)
 	logging.info('Server starting')
 	server.serve_forever()
@@ -98,5 +98,5 @@ except KeyboardInterrupt:
 finally:
 	logging.info('Server stopping')
 	server.shutdown()
+	PWM.cleanup()
 	logging.info('Server stopped')
-	GPIO.cleanup()

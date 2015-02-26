@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-#import RPi.GPIO as GPIO
+import Adafruit_BBIO.PWM as PWM
+
 import time
 import thread
 
@@ -27,7 +28,7 @@ def print_time(pin):
 		elif tabPin[pin][4] < 0 :
 			tabPin[pin][4] = 0
 
-#		tabPin[pin][0].ChangeDutyCycle(tabPin[pin][4])
+		PWM.ChangeDutyCycle(tabPin[pin][0], tabPin[pin][4])
 			
 	tabPin[pin][3] = False
 
@@ -37,19 +38,19 @@ def fadeTo(unePin, value, temps):
 	if not unePin in tabPin:
 		tabPin[unePin]    = [0 for i in range(6)]
 
-		tabPin[unePin][1] = 0					#Valeur (Goal)
-		tabPin[unePin][2] = 0					#Step
-		tabPin[unePin][3] = False				#On/Off
-		tabPin[unePin][4] = 0					#Valeur actuel
+		tabPin[unePin][0] = unePin		#Pin
 
-#		GPIO.setup(unePin, GPIO.OUT)
-#		tabPin[unePin][0] = GPIO.PWM(unePin, 150)	#Porte/Frequence
-#		tabPin[unePin][0].start(0)
+		tabPin[unePin][1] = 0			#Valeur (Goal)
+		tabPin[unePin][2] = 0			#Step
+		tabPin[unePin][3] = False		#On/Off
+		tabPin[unePin][4] = 0			#Valeur actuel
+
+		PWM.start(unePin, 150)			#Porte/Frequence
 
 	tabPin[unePin][1] = value
 
 	if temps == 0 or temps == 1:
-		tabPin[unePin][2] = value - tabPin[pin][4]
+		tabPin[unePin][2] = value - tabPin[unePin][4]
 	else:
 		dif = value- tabPin[unePin][4]
 		step = dif/(float(temps)/1000) * sleepingTime
